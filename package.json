@@ -6,9 +6,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.10.15",
+    "@mui/material": "^5.10.15",
+    "@thirdweb-dev/react": "^3.6.2",
+    "@thirdweb-dev/sdk": "^3.6.2",
+    "ethers": "^5.7.2",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-responsive-carousel": "^3.2.23"
   },
   "devDependencies": {
     "@types/node": "18.11.3",

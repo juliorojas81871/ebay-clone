@@ -1,12 +1,10 @@
 import React, { FormEvent, useState } from "react";
-import {Header} from "../components";
+import { Header } from "../components";
 import { useAddress, useContract } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-type Props = {};
-
-function addItem({}: Props) {
+const addItem = () => {
   const rout = useRouter();
   const address = useAddress();
   const { contract, isLoading, error } = useContract(
@@ -58,7 +56,7 @@ function addItem({}: Props) {
     <div>
       <Header />
       <Head>
-        <title>Ebay Clone: Add Item</title>
+        <title>Ebay Clone: Mint NFT</title>
         <link rel="icon" href="/ebay-icon.png" />
       </Head>
       <main className="max-w-6xl mx-auto p-10 border rounded-lg shadow-md my-10">
@@ -73,10 +71,7 @@ function addItem({}: Props) {
             className="object-contain border"
             width={400}
             height={400}
-            src={
-              preview ||
-              "/addItem.png"
-            }
+            src={preview || "/addItem.png"}
           />
           <form
             onSubmit={mintItem}
@@ -124,6 +119,6 @@ function addItem({}: Props) {
       </main>
     </div>
   );
-}
+};
 
 export default addItem;

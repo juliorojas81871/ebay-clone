@@ -94,7 +94,7 @@ const ListingPage = () => {
     }
   };
 
-  const buyItem = async () => {
+  const buyNFT = async () => {
     if (networkMismatch) {
       switchNetwork && switchNetwork(network);
       return;
@@ -111,13 +111,13 @@ const ListingPage = () => {
       {
         onSuccess(data, variables, context) {
           alert(
-            "Item has been Purchase please check your wallet for owned Item"
+            "NFT has been Purchase please check your wallet for owned NFT"
           );
           console.log("SUCCESS", data);
           rout.replace("/");
         },
         onError(error, variables, context) {
-          alert("Item could not be acquired... please try again");
+          alert("NFT could not be acquired... please try again");
           console.log("ERROR", error);
         },
       }
@@ -137,13 +137,13 @@ const ListingPage = () => {
           listing.buyoutPrice.toString() ===
           ethers.utils.parseEther(bidamount).toString()
         ) {
-          console.log("butout price met, buying Item.. NOW ");
-          buyItem();
+          console.log("butout price met, buying NFT.. NOW ");
+          buyNFT();
           return;
         }
 
         console.log(
-          "buyout amount was not met, please make an offer to buy this Item"
+          "buyout amount was not met, please make an offer to buy this NFT"
         );
 
         await makeOffer(
@@ -154,7 +154,7 @@ const ListingPage = () => {
           },
           {
             onSuccess(data, variables, context) {
-              alert("Item has received an offer to buy this Item");
+              alert("NFT has received an offer to buy this NFT");
               console.log("SUCCESS", data, variables, context);
               rout.replace("/");
               setBidAmount("");
@@ -199,18 +199,18 @@ const ListingPage = () => {
     return (
       <div>
         <Head>
-          <title>Ebay Clone: Loading Item</title>
+          <title>Ebay Clone: Loading NFT</title>
           <link rel="icon" href="/ebay-icon.png" />
         </Head>
         <Header />
         <div className="text-center text-green-500 animate-pulse">
-          <p>Loading Item...</p>
+          <p>Loading NFT...</p>
         </div>
       </div>
     );
   }
   if (isLoading) {
-    <div className="text-green-500">Loading item</div>;
+    <div className="text-green-500">Loading NFT</div>;
   }
 
   return (
@@ -248,7 +248,7 @@ const ListingPage = () => {
               {listing.buyoutCurrencyValuePerToken.symbol}
             </p>
             <button
-              onClick={buyItem}
+              onClick={buyNFT}
               className="col-start-2 mt-5 w-40 bg-blue-500 font-bold border text-white rounded-xl py-1  shadow-lg  hover:bg-white hover:text-blue-500 active:bg-blue-500 active:text-white"
             >
               Buy Now
@@ -328,7 +328,7 @@ const ListingPage = () => {
                 : "Bid on this Auction"}
             </p>
 
-            {/*remaining timne on the bid for this item */}
+            {/*remaining timne on the bid for this NFT */}
 
             {listing.type === ListingType.Auction && (
               <>

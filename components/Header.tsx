@@ -8,12 +8,11 @@ import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Link from "next/link";
 import Image from "next/image";
+import { ConnectWallet } from "@thirdweb-dev/react";
 
 type Props = {};
 
 function Header({}: Props) {
-  const connectWithMetamask = useMetamask();
-  const disconnectWithMetamask = useDisconnect();
   const address = useAddress();
   return (
     <div className="max-w-6xl mx-auto p-2">
@@ -28,37 +27,25 @@ function Header({}: Props) {
           />
         </Link>
       </div>
-      <nav className="flex justify-between">
-        <div className="flex items-center space-x-4 ">
-          {address ? (
-            <button
-              onClick={disconnectWithMetamask}
-              className="connectWalletbtn text-xs"
-            >
-              Hi, {address.slice(0, 5) + "..." + address.slice(-4)}
-            </button>
-          ) : (
-            <button
-              onClick={connectWithMetamask}
-              className="connectWalletbtn text-xs"
-            >
-              Connect To Your wallet{" "}
-            </button>
-          )}
-
-          <p className="headerLinks">eBay Offers</p>
+      <nav className="flex justify-between items-center text-sm">
+        <div className="flex items-center md:space-x-4 space-x-2 ">
+          <ConnectWallet 
+            className="relative flex items-centerborder-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition duration-200 text-blue-600 hover:bg-blue-600/50 hover:text-white"
+            colorMode="light"
+          />
+          <p className="headerLinks hidden lg:inline">eBay Offers</p>
           <p className="headerLinks">Help & Contact</p>
         </div>
         <div className="flex items-center text-sm space-x-4">
-          <LanguageIcon className="headerLinks" />
-          <p className="headerLinks">Ship to</p>
+          <LanguageIcon className="headerLinks hidden lg:inline" />
+          <p className="headerLinks hidden lg:inline">Ship to</p>
           <p className="headerLinks"> Sell</p>
           <p className="headerLinks">Watchlist</p>
           <Link className="flex items-center hover:link" href="/addItem">
             {" "}
             Add to inventory <ExpandMoreIcon />
           </Link>
-          <p className="headerLinks">
+          <p className="headerLinks hidden lg:inline">
             {" "}
             My eBay{" "}
             <span>

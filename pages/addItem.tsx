@@ -3,6 +3,9 @@ import { Header } from "../components";
 import { useAddress, useContract } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const addItem = () => {
   const rout = useRouter();
@@ -54,6 +57,17 @@ const addItem = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Header />
       <Head>
         <title>Ebay Clone: Mint NFT</title>

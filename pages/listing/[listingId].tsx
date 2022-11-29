@@ -20,6 +20,8 @@ import Countdown from "react-countdown";
 import network from "../../utils/network";
 import { ethers } from "ethers";
 import Head from "next/head";
+import toast from "react-hot-toast";
+import { RaceBy, Ring } from "@uiball/loaders";
 
 const ListingPage = () => {
   const rout = useRouter();
@@ -51,13 +53,17 @@ const ListingPage = () => {
   } = useAcceptDirectListingOffer(contract);
 
   //bringing the offers to screen
-  const offers = useOffers(contract, listingId);
+  const { data: offers, isLoading: isLoadingOffers } = useOffers(
+    contract,
+    listingId
+  );
   //make bid
-  const { mutate: makeBid } = useMakeBid(contract);
+  const { mutate: makeBid, isLoading: isMakingBid } = useMakeBid(contract);
   //buy now functionality
-  const { mutate: buyNow } = useBuyNow(contract);
+  const { mutate: buyNow, isLoading: isBuying } = useBuyNow(contract);
 
-  const { mutate: makeOffer } = useMakeOffer(contract);
+  const { mutate: makeOffer, isLoading: isMakingOffer } =
+    useMakeOffer(contract);
 
   useEffect(() => {
     if (!listingId || !contract || !listing) return;
@@ -95,12 +101,17 @@ const ListingPage = () => {
   };
 
   const buyNFT = async () => {
+    if (!address) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
     if (networkMismatch) {
       switchNetwork && switchNetwork(network);
       return;
     }
 
     if (!listingId || !contract) return;
+    toast.loading("Buying NFT...");
 
     await buyNow(
       {
@@ -109,22 +120,27 @@ const ListingPage = () => {
         type: listing?.type!,
       },
       {
-        onSuccess(data, variables, context) {
-          alert(
+        onSuccess() {
+          toast.dismiss();
+          toast.success(
             "NFT has been Purchase please check your wallet for owned NFT"
           );
-          console.log("SUCCESS", data);
           rout.replace("/");
         },
-        onError(error, variables, context) {
-          alert("NFT could not be acquired... please try again");
-          console.log("ERROR", error);
+        onError(error: any, variable, context) {
+          toast.dismiss();
+          toast.error("NFT could not be acquired... please try again");
+          console.log("ERROR", error, variable, context);
         },
       }
     );
   };
 
   const createBidorOffer = async () => {
+    if (!address) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
     //for error handling
     try {
       if (networkMismatch) {
@@ -146,6 +162,8 @@ const ListingPage = () => {
           "buyout amount was not met, please make an offer to buy this NFT"
         );
 
+        toast.loading("Making offer...");
+
         await makeOffer(
           {
             quantity: 1,
@@ -153,15 +171,16 @@ const ListingPage = () => {
             pricePerToken: bidamount,
           },
           {
-            onSuccess(data, variables, context) {
-              alert("NFT has received an offer to buy this NFT");
-              console.log("SUCCESS", data, variables, context);
+            onSuccess() {
+              toast.dismiss();
+              toast.error("NFT has received an offer to buy this NFT");
               rout.replace("/");
               setBidAmount("");
             },
-            onError(error, variables, context) {
-              alert(
-                "Offer could not be completed please try again or change the offer amount"
+            onError(error: any, variables, context) {
+              toast.dismiss();
+              toast.error(
+                "Error! Offer could not be completed please try again or change the offer amount"
               );
               console.log("ERROR", error, variables, context);
             },
@@ -171,21 +190,22 @@ const ListingPage = () => {
 
       //Auction Listing
       if (listing?.type === ListingType.Auction) {
-        console.log("Making a bid");
+        toast.loading("Making a bid...");
         await makeBid(
           {
             listingId,
             bid: bidamount,
           },
           {
-            onSuccess(data, variables, context) {
-              alert("Auction made successfully");
-              console.log("SUCCESS", data, variables, context);
+            onSuccess() {
+              toast.dismiss();
+              toast.success("Auction made successfully");
               setBidAmount("");
             },
             onError(error, variables, context) {
-              alert("Auction could not be executed please try again");
-              console.log("", error, variables, context);
+              toast.dismiss();
+              toast.success("Auction could not be executed please try again");
+              console.log("Error", error, variables, context);
             },
           }
         );
@@ -195,7 +215,7 @@ const ListingPage = () => {
     }
   };
 
-  if (!listing) {
+  if (isLoading) {
     return (
       <div>
         <Head>
@@ -205,12 +225,20 @@ const ListingPage = () => {
         <Header />
         <div className="text-center text-green-500 animate-pulse">
           <p>Loading NFT...</p>
+          <div className="flex w-full justify-center">
+            <RaceBy
+              size={80}
+              lineWeight={5}
+              speed={1.4}
+              color={"rgb(34 197 94)"}
+            />
+          </div>
         </div>
       </div>
     );
   }
-  if (isLoading) {
-    <div className="text-green-500">Loading NFT</div>;
+  if (!listing && !isLoading) {
+    return <div className="text-green-500">Listing not found</div>;
   }
 
   return (
@@ -251,18 +279,29 @@ const ListingPage = () => {
               onClick={buyNFT}
               className="col-start-2 mt-5 w-40 bg-blue-500 font-bold border text-white rounded-xl py-1  shadow-lg  hover:bg-white hover:text-blue-500 active:bg-blue-500 active:text-white"
             >
-              Buy Now
+              {isBuying ? (
+                <div className="flex flex-col justify-center items-center">
+                  <Ring
+                    size={20}
+                    lineWeight={5}
+                    speed={2}
+                    color={"rgb(34 197 94)"}
+                  />
+                </div>
+              ) : (
+                <p>Buy Now</p>
+              )}
             </button>
           </div>
 
-          {listing.type === ListingType.Direct && offers?.data && (
+          {listing.type === ListingType.Direct && offers && (
             <div className="grid grid-cols-2 gap-y-2">
               <p className="font-bold">Offers:</p>
               <p className="font-bold ">
-                {offers?.data?.length >= 0 ? offers?.data?.length : 0}
+                {offers?.length >= 0 ? offers?.length : 0}
               </p>
 
-              {offers?.data?.map((offer) => (
+              {offers?.map((offer) => (
                 <>
                   <p className="flex item-center ml-5 text-sm italic">
                     <AccountCircleIcon className="text-green-500" />
@@ -291,18 +330,16 @@ const ListingPage = () => {
                               addressOfOfferor: offer.offeror,
                             },
                             {
-                              onSuccess(data, variables, context) {
-                                alert("offer accepted");
-                                console.log(
-                                  "SUCCESS",
-                                  data,
-                                  variables,
-                                  context
-                                );
+                              onSuccess() {
+                                toast.dismiss();
+                                toast.success("Offer accepted successfully!");
                                 rout.replace("/");
                               },
                               onError(error, variables, context) {
-                                alert("ERROR: offer could not be accepted");
+                                toast.dismiss();
+                                toast.error(
+                                  "ERROR: offer could not be accepted"
+                                );
                                 console.log("ERROR", error, variables, context);
                               },
                             }
@@ -351,9 +388,22 @@ const ListingPage = () => {
             />
             <button
               onClick={createBidorOffer}
-              className="bg-red-600 w-40 border font-bold text-white  rounded-xl py-1  shadow-lg hover:bg-white hover:text-blue-500 active:bg-red-600 active:text-white"
+              className="bg-red-600 w-40 border font-bold text-white rounded-xl py-1 shadow-lg hover:bg-white hover:text-blue-500 active:bg-red-600 active:text-white"
             >
-              {listing.type === ListingType.Direct ? "Offer" : "Bid"}
+              {isMakingOffer || isMakingBid ? (
+                <div className="flex flex-col justify-center items-center">
+                  <Ring
+                    size={20}
+                    lineWeight={5}
+                    speed={2}
+                    color={"rgb(34 197 94)"}
+                  />
+                </div>
+              ) : listing.type === ListingType.Direct ? (
+                "Offer"
+              ) : (
+                "Bid"
+              )}
             </button>
           </div>
         </section>

@@ -1,24 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Header, Coursel } from "../components";
-import {
-  useActiveListings,
-  useContract,
-  MediaRenderer,
-} from "@thirdweb-dev/react";
+import { Header, Coursel, Footer } from "../components";
+import { MediaRenderer } from "@thirdweb-dev/react";
 import { ListingType } from "@thirdweb-dev/sdk";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import Link from "next/link";
 import { RaceBy } from "@uiball/loaders";
+import useListItem from "../utils/hooks/useListItem";
 
 const Home: NextPage = () => {
-  const { contract } = useContract(
-    process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
-    "marketplace"
-  );
-  const { data: listings, isLoading: loadingListings } =
-    useActiveListings(contract);
+  const { listings, loadingListings } = useListItem();
 
   return (
     <div>
@@ -93,6 +85,7 @@ const Home: NextPage = () => {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   );
 };

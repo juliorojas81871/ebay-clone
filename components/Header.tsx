@@ -10,9 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ConnectWallet } from "@thirdweb-dev/react";
 
-type Props = {};
-
-function Header({}: Props) {
+const Header = () => {
   const address = useAddress();
   return (
     <div className="max-w-6xl mx-auto p-2">
@@ -27,10 +25,10 @@ function Header({}: Props) {
           />
         </Link>
       </div>
-      <nav className="flex justify-between items-center text-sm">
+      <nav className="flex justify-between items-center ">
         <div className="flex items-center md:space-x-4 space-x-2 ">
           <ConnectWallet 
-            className="relative flex items-center border-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition bg-blue-600 duration-200 text-white hover:bg-white hover:text-black"
+            className="relative flex items-center text-sm border-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition bg-blue-600 duration-200 text-white hover:bg-white hover:text-black"
             colorMode="light"
           />
           <p className="headerLinks hidden lg:inline">eBay Offers</p>
@@ -83,7 +81,7 @@ function Header({}: Props) {
             type="text"
             placeholder="Search for anything"
           />
-          <button className="border-gray-300 border-l pl-4 whitespace-nowrap text-sm">
+          <button className="border-gray-300 border-l pl-4 whitespace-nowrap text-sm hidden sm:inline">
             {" "}
             All Catergories <ExpandMoreIcon />
           </button>

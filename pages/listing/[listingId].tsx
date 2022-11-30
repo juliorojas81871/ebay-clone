@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import { RaceBy, Ring } from "@uiball/loaders";
 
 const ListingPage = () => {
+
   const rout = useRouter();
   const address = useAddress();
   const { listingId } = rout.query as { listingId: string };
@@ -44,16 +45,14 @@ const ListingPage = () => {
     "marketplace"
   );
 
-  const { data: listing, isLoading, error } = useListing(contract, listingId);
+  const { data: listing, isLoading: isLoadingList } = useListing(contract, listingId);
 
   const {
-    mutate: acceptOffer,
-    isLoading: acceptofferIsLoading,
-    error: errorAcceptingOffer,
+    mutate: acceptOffer
   } = useAcceptDirectListingOffer(contract);
 
   //bringing the offers to screen
-  const { data: offers, isLoading: isLoadingOffers } = useOffers(
+  const { data: offers } = useOffers(
     contract,
     listingId
   );
@@ -166,8 +165,8 @@ const ListingPage = () => {
 
         await makeOffer(
           {
-            quantity: 1,
             listingId,
+            quantity: 1,
             pricePerToken: bidamount,
           },
           {
@@ -215,7 +214,7 @@ const ListingPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoadingList) {
     return (
       <div>
         <Head>
@@ -237,7 +236,7 @@ const ListingPage = () => {
       </div>
     );
   }
-  if (!listing && !isLoading) {
+  if (!listing && !isLoadingList) {
     return <div className="text-green-500">Listing not found</div>;
   }
 

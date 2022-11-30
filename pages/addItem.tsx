@@ -3,37 +3,41 @@ import { Header } from "../components";
 import { useAddress, useContract } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
+import { Ring } from "@uiball/loaders";
 
 const addItem = () => {
   const rout = useRouter();
   const address = useAddress();
-  const { contract, isLoading, error } = useContract(
+  const { contract } = useContract(
     process.env.NEXT_PUBLIC_COLLECTION_CONTACT,
     "nft-collection"
   );
   const [preview, setPreview] = useState<string>();
   const [image, setImage] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const mintItem = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!contract || !address) return;
-    if (!image) {
-      alert("No image selected");
+    if (!contract || !address) {
+      toast.error("Please connect your wallet");
       return;
+    }
+    setIsLoading(true);
+    if (!image) {
+      return toast.error("Please upload an image");
     }
     const target = e.target as typeof e.target & {
       name: { value: string };
       description: { value: string };
     };
     if (!target.name.value) {
-      alert("No Item name was given");
+      toast.error("Please enter a name");
       return;
     }
     if (!target.description.value) {
-      alert("No description was given for Item");
+      toast.error("Please enter a description");
       return;
     }
     const metadata = {
@@ -41,33 +45,26 @@ const addItem = () => {
       description: target.description.value,
       image: image,
     };
+    setIsLoading(true);
+    toast.loading("Minting/Adding NFT...");
     try {
       const tx = await contract.mintTo(address, metadata);
       const receipt = tx.receipt; //the transition receipt
-      const tokenId = tx.id; //grab the token id
-      const Item = await tx.data(); // fetch the transaction details of the minted Item
       if (!receipt) return;
-
-      console.log(receipt, tokenId, Item);
+      toast.dismiss();
+      toast.success("Successfully minted NFT");
+      setIsLoading(false);
       rout.push("/");
     } catch (err) {
+      toast.dismiss();
+      toast.error("Error minting NFT");
+      setIsLoading(false);
       console.error(err);
     }
   };
 
   return (
     <div>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={2500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <Header />
       <Head>
         <title>Ebay Clone: Mint NFT</title>
@@ -126,7 +123,18 @@ const addItem = () => {
               type="submit"
               className="mx-auto bg-blue-500 font-bold w-56 px-2 py-2 rounded-2xl shadow-xl border text-white hover:bg-white hover:text-blue-500 md:ml-auto "
             >
-              Add Item
+              {isLoading ? (
+                <div className="flex flex-col justify-center items-center">
+                  <Ring
+                    size={20}
+                    lineWeight={5}
+                    speed={2}
+                    color={"rgb(34 197 94)"}
+                  />
+                </div>
+              ) : (
+                <p>Add Item</p>
+              )}
             </button>
           </form>
         </div>

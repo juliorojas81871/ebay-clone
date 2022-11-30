@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import {
   MediaRenderer,
@@ -13,16 +13,15 @@ import {
 import { useRouter } from "next/router";
 import {
   NFT,
-  ChainId,
-  NATIVE_TOKENS,
   NATIVE_TOKEN_ADDRESS,
 } from "@thirdweb-dev/sdk";
 import network from "../utils/network";
 import { useMetamask } from "@thirdweb-dev/react";
+import { RaceBy, Ring } from "@uiball/loaders";
+import toast from "react-hot-toast";
+import Head from "next/head";
 
-type Props = {};
-
-function Create({}: Props) {
+const Create = () => {
   const connectWithMetamask = useMetamask();
 
   const address = useAddress();
@@ -34,8 +33,12 @@ function Create({}: Props) {
     "marketplace"
   );
   const [selectNft, setSelectNft] = useState<NFT>();
+  const [listingTypeCheck, setListingType] = React.useState<
+    "directListing" | "auctionListing" | null
+  >(null);
+  const [priceCheck, setPrice] = React.useState<string>("");
 
-  const { contract: collectionContract } = useContract(
+  const { contract: collectionContract, isLoading } = useContract(
     process.env.NEXT_PUBLIC_COLLECTION_CONTACT,
     "nft-collection"
   );
@@ -45,26 +48,24 @@ function Create({}: Props) {
   const networkMismatch = useNetworkMismatch();
   const [, switchNetwork] = useNetwork();
 
-  const {
-    mutate: createDirectListing,
-    isLoading,
-    error,
-  } = useCreateDirectListing(contract);
+  const { mutate: createDirectListing,  isLoading: isLoadingCreate, } = useCreateDirectListing(contract);
 
   const {
     mutate: createAuctionListing,
     isLoading: isLoadingAuction,
-    error: errorAuction,
   } = useCreateAuctionListing(contract);
 
   const handleCreateListing = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (networkMismatch) {
       switchNetwork && switchNetwork(network);
       return;
     }
 
     if (!selectNft) return;
+    if (!listingTypeCheck) return toast.error("Please select a listing type");
+    if (!priceCheck) return toast.error("Please enter a price");
 
     const target = e.target as typeof e.target & {
       elements: { listingType: { value: string }; price: { value: string } };
@@ -73,6 +74,7 @@ function Create({}: Props) {
     const { listingType, price } = target.elements;
 
     if (listingType.value === "directListing") {
+      toast.loading("Creating direct listing...");
       createDirectListing(
         {
           assetContractAddress: process.env.NEXT_PUBLIC_COLLECTION_CONTACT!,
@@ -84,11 +86,15 @@ function Create({}: Props) {
           startTimestamp: new Date(),
         },
         {
-          onSuccess(data, variables, context) {
-            console.log("SUCCESS: ", data, variables, context);
+          onSuccess() {
+            toast.dismiss();
+            toast.success("Direct listing created");
             rout.push("/");
           },
           onError(error, variables, context) {
+            toast.dismiss();
+            toast.error("Failed to create direct listing");
+            setListingType(null)
             console.log("ERROR:", error, variables, context);
           },
         }
@@ -96,6 +102,7 @@ function Create({}: Props) {
     }
 
     if (listingType.value === "auctionListing") {
+      toast.loading("Creating auction listing...");
       createAuctionListing(
         {
           assetContractAddress: process.env.NEXT_PUBLIC_COLLECTION_CONTACT!,
@@ -108,11 +115,15 @@ function Create({}: Props) {
           reservePricePerToken: 0,
         },
         {
-          onSuccess(data, variables, context) {
-            console.log("SUCCESS:", data, variables, context);
+          onSuccess() {
+            toast.dismiss();
+            toast.success("Auction listing created");
             rout.push("/");
           },
           onError(error, variables, context) {
+            toast.dismiss();
+            toast.error("Failed to create auction listing");
+            setListingType(null)
             console.log("ERROR:", error, variables, context);
           },
         }
@@ -122,6 +133,10 @@ function Create({}: Props) {
 
   return (
     <div>
+      <Head>
+        <title>Ebay Clone: Create Listing</title>
+        <link rel="icon" href="/ebay-icon.png" />
+      </Head>
       <Header />
       <main className="max-w-6xl mx-auto pt-2">
         <h1 className="text-4xl font-bold">List an Item</h1>
@@ -130,7 +145,24 @@ function Create({}: Props) {
         </h2>
         <hr className="mb-5" />
         {address ? (
-          <p>Below you will find the NFTs in which you own in your wallet</p>
+          <>
+            <p>Below you will find the NFTs in which you own in your wallet</p>
+            {isLoading && (
+              <>
+                <p className="text-center animate-pulse text-blue-500">
+                  Loading Listing please wait...
+                </p>
+                <div className="flex w-full justify-center">
+                  <RaceBy
+                    size={130}
+                    lineWeight={5}
+                    speed={1.4}
+                    color={"#3B82F6"}
+                  />
+                </div>
+              </>
+            )}
+          </>
         ) : (
           <div className="text-center py-5">
             <p>You are not Loged in please connect your Wallet</p>
@@ -177,6 +209,7 @@ function Create({}: Props) {
                   type="radio"
                   name="listingType"
                   value="directListing"
+                  onChange={() => setListingType("directListing")}
                 />
 
                 <label className="border-r font-light" htmlFor="">
@@ -187,6 +220,7 @@ function Create({}: Props) {
                   type="radio"
                   name="listingType"
                   value="auctionListing"
+                  onChange={() => setListingType("auctionListing")}
                 />
 
                 <label className="border-r font-light" htmlFor="">
@@ -197,13 +231,20 @@ function Create({}: Props) {
                   name="price"
                   type="text"
                   placeholder="0.05"
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
               <button
                 type="submit"
                 className="bg-blue-500 p-3 text-white font-semibold rounded-2xl mt-8 shadow-lg boder hover:bg-white hover:text-blue-500 active:text-white active:bg-blue-400"
               >
-                Create Listing
+                {isLoadingAuction || isLoadingCreate ? (
+                  <div className="flex flex-col justify-center items-center">
+                    <Ring size={20} lineWeight={5} speed={2} color={"rgb(34 197 94)"} />
+                  </div>
+                ) : (
+                  <p>Create Listing</p>
+                )}
               </button>
             </div>
           </form>
@@ -211,6 +252,6 @@ function Create({}: Props) {
       </main>
     </div>
   );
-}
+};
 
 export default Create;

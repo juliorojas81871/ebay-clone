@@ -1,5 +1,5 @@
 import React from "react";
-import { useAddress, useDisconnect, useMetamask } from "@thirdweb-dev/react";
+import { useAddress } from "@thirdweb-dev/react";
 import LanguageIcon from "@mui/icons-material/Language";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
@@ -30,7 +30,7 @@ function Header({}: Props) {
       <nav className="flex justify-between items-center text-sm">
         <div className="flex items-center md:space-x-4 space-x-2 ">
           <ConnectWallet 
-            className="relative flex items-centerborder-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition duration-200 text-blue-600 hover:bg-blue-600/50 hover:text-white"
+            className="relative flex items-center border-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition bg-blue-600 duration-200 text-white hover:bg-white hover:text-black"
             colorMode="light"
           />
           <p className="headerLinks hidden lg:inline">eBay Offers</p>

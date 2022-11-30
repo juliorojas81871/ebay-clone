@@ -10,6 +10,7 @@ import { ListingType } from "@thirdweb-dev/sdk";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import AvTimerIcon from "@mui/icons-material/AvTimer";
 import Link from "next/link";
+import { RaceBy } from "@uiball/loaders";
 
 const Home: NextPage = () => {
   const { contract } = useContract(
@@ -30,9 +31,14 @@ const Home: NextPage = () => {
       <Coursel />
       <main className="max-w-6xl mx-auto p-2">
         {loadingListings ? (
-          <p className="text-center animate-pulse text-blue-500">
-            Loading Listing please wait...
-          </p>
+          <>
+            <p className="text-center animate-pulse text-blue-500">
+              Loading Listing please wait...
+            </p>
+            <div className="flex w-full justify-center">
+              <RaceBy size={100} lineWeight={5} speed={1.4} color={"#3B82F6"} />
+            </div>
+          </>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mx-auto">
             {listings?.map((listing) => (

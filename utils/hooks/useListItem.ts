@@ -1,36 +1,37 @@
 import {
-    useAddress,
-    useContract,
-    useNetwork,
-    useNetworkMismatch,
-    useOwnedNFTs,
-    useCreateAuctionListing,
-    useCreateDirectListing,
-    useMetamask,
-    useActiveListings
-  } from "@thirdweb-dev/react";
+  useAddress,
+  useContract,
+  useNetwork,
+  useNetworkMismatch,
+  useOwnedNFTs,
+  useCreateAuctionListing,
+  useCreateDirectListing,
+  useMetamask,
+  useActiveListings,
+} from "@thirdweb-dev/react";
 import { NATIVE_TOKEN_ADDRESS, NFT } from "@thirdweb-dev/sdk";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
 import network from "../network";
 
 const useListItem = () => {
-    const connectWithMetamask = useMetamask();
-    const address = useAddress();
-    const rout = useRouter();
-    const [selectNft, setSelectNft] = useState<NFT>();
-    const [listingTypeCheck, setListingType] = React.useState<
-      "directListing" | "auctionListing" | null
-    >(null);
-    const [priceCheck, setPrice] = React.useState<string>("");
-  
+  const connectWithMetamask = useMetamask();
+  const address = useAddress();
+  const rout = useRouter();
+  const [selectNft, setSelectNft] = useState<NFT>();
+  const [listingTypeCheck, setListingType] = React.useState<
+    "directListing" | "auctionListing" | null
+  >(null);
+  const [priceCheck, setPrice] = React.useState<string>("");
+
   const { contract } = useContract(
     process.env.NEXT_PUBLIC_MARKETPLACE_CONTRACT,
     "marketplace"
   );
-  const { data: listings, isLoading: loadingListings } = useActiveListings(contract);
+  const { data: listings, isLoading: loadingListings } =
+    useActiveListings(contract);
   const { contract: collectionContract, isLoading } = useContract(
     process.env.NEXT_PUBLIC_COLLECTION_CONTACT,
     "nft-collection"
@@ -123,21 +124,21 @@ const useListItem = () => {
     }
   };
 
-    return {
-        listings,
-        loadingListings,
-        address, 
-        isLoading,
-        connectWithMetamask,
-        ownedNfts,
-        setSelectNft,
-        selectNft,
-        handleCreateListing,
-        setListingType,
-        isLoadingAuction,
-        isLoadingCreate,
-        setPrice
-    };
+  return {
+    listings,
+    loadingListings,
+    address,
+    isLoading,
+    connectWithMetamask,
+    ownedNfts,
+    setSelectNft,
+    selectNft,
+    handleCreateListing,
+    setListingType,
+    isLoadingAuction,
+    isLoadingCreate,
+    setPrice,
+  };
 };
 
 export default useListItem;

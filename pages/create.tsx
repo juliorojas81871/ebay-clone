@@ -66,8 +66,8 @@ const Create = () => {
             </button>
           </div>
         )}
-
-        <div className="flex overflow-x-scroll space-x-2 p-4">
+        
+        <div className="flex overflow-x-scroll space-x-2 p-4 py-5 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100">
           {ownedNfts?.data?.map((nft) => (
             <div
               key={nft.metadata.id}

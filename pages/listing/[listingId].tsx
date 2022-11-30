@@ -24,7 +24,6 @@ import toast from "react-hot-toast";
 import { RaceBy, Ring } from "@uiball/loaders";
 
 const ListingPage = () => {
-
   const rout = useRouter();
   const address = useAddress();
   const { listingId } = rout.query as { listingId: string };
@@ -45,17 +44,15 @@ const ListingPage = () => {
     "marketplace"
   );
 
-  const { data: listing, isLoading: isLoadingList } = useListing(contract, listingId);
-
-  const {
-    mutate: acceptOffer
-  } = useAcceptDirectListingOffer(contract);
-
-  //bringing the offers to screen
-  const { data: offers } = useOffers(
+  const { data: listing, isLoading: isLoadingList } = useListing(
     contract,
     listingId
   );
+
+  const { mutate: acceptOffer } = useAcceptDirectListingOffer(contract);
+
+  //bringing the offers to screen
+  const { data: offers } = useOffers(contract, listingId);
   //make bid
   const { mutate: makeBid, isLoading: isMakingBid } = useMakeBid(contract);
   //buy now functionality

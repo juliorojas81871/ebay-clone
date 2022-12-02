@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.4",
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "^5.10.15",
     "@thirdweb-dev/react": "^3.6.2",
@@ -13,10 +14,12 @@
     "@uiball/loaders": "^1.2.6",
     "ethers": "^5.7.2",
     "next": "latest",
+    "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.7.1",
     "react-responsive-carousel": "^3.2.23",
     "react-toastify": "^9.1.1",
     "tailwind-scrollbar": "^2.0.1",

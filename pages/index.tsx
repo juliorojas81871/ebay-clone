@@ -35,7 +35,7 @@ const Home: NextPage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mx-auto">
             {listings?.map((listing) => (
               <Link key={listing.id} href={`/listing/${listing.id}`}>
-                <div className="flex flex-col z-30 shadow-lg card hover:scale-105 transition-all duration-150 ease-in-out ">
+                <div className="flex flex-col z-30 shadow-lg card hover:scale-105 transition-all duration-150 ease-in-out dark:bg-[#3B3B3B]">
                   <div className="flex flex-1 flex-col pb-2 items-center">
                     <MediaRenderer className="w-44" src={listing.asset.image} />{" "}
                     {/*//MediaRenderer is used to render images from THirdweb*/}
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
                         {listing.asset.name}
                       </h2>
                       <hr />
-                      <p className=" truncate text-sm text-gray-600 mt-2">
+                      <p className=" truncate text-sm text-gray-600 dark:text-gray-400 mt-2">
                         {listing.asset.description}
                       </p>
                     </div>

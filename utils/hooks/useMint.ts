@@ -1,5 +1,5 @@
-import { useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
-import React, { FormEvent, useState } from "react";
+import { useAddress, useContract } from "@thirdweb-dev/react";
+import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 

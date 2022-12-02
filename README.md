@@ -5,12 +5,12 @@
 This code is an eBay clone where users can buy / auction NFTs using crypto money. 
 Users can also mint/add NFTs to their list and list those NFTs so people can buy or auction those NFTs.  
 If anyone want see this code, [please click at this link](https://ebay-clone-theta.vercel.app/).
-Important note that this website will only work for MetaMask.
 
 ## Requirements!!!
 Users must have and use the MetaMask extension [use this link to download it](https://metamask.io/download/).
 Users must also get MATIC (MUMBAI FAUCET) to buy/sell NFTs. It is fake crypto money that a person can download for free [using this link](https://mumbaifaucet.com/).
 All the person needs to do is copy and paste their MetaMask wallet address on the website.
+The Program will also work on Coinbase Wallet abd WalletConnect
 
 ## Technologies & Methods Used
 

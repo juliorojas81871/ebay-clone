@@ -16,11 +16,11 @@ const addItem = () => {
         <link rel="icon" href="/ebay-icon.png" />
       </Head>
       <main className="max-w-6xl mx-auto p-10 border rounded-lg shadow-md my-10">
-        <h1 className="text-4xl font-bold ">Add an Item to the Market place</h1>
-        <h2 className="text-xl font-semibold pt-5">Item details</h2>
+        <h1 className="text-4xl font-bold ">Add an NFT to the Market place</h1>
+        <h2 className="text-xl font-semibold pt-5">NFT details</h2>
         <p className="pb-5">
           By adding an item to the marketplace, you are essentially Minting an
-          Item of the item into your wallet which you can then list for Sell.
+          NFT of the item into your wallet which you can then list for Sell.
         </p>
         <div className="flex flex-col justify-center items-center md:flex-row md:space-x-5 pt-5">
           <img

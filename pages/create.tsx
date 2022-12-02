@@ -19,6 +19,8 @@ const Create = () => {
     isLoadingAuction,
     isLoadingCreate,
     setPrice,
+    connectWithWalletConnect,
+    connectWithCoinbaseWallet,
   } = useListItem();
 
   return (
@@ -55,24 +57,38 @@ const Create = () => {
           </>
         ) : (
           <div className="text-center py-5">
-            <p>You are not Loged in please connect your Wallet</p>
+            <p>You are not Logged in please connect your Wallet</p>
             <p>in order to list Items and mint your NFTs</p>
             <button
-              onClick={connectWithMetamask}
+              onClick={connectWithMetamask }
               className="bg-blue-500 p-2 rounded-lg mt-6 text-white font-semibold shadow-lg active:bg-white active:text-blue-500"
             >
               {" "}
-              Connect your wallet
+              Metamask
+            </button>
+            <button
+              onClick={ connectWithWalletConnect }
+              className="bg-blue-500 p-2 mx-2 x-4 rounded-lg mt-6 text-white font-semibold shadow-lg active:bg-white active:text-blue-500"
+            >
+              {" "}
+              WalletConnect
+            </button>
+            <button
+              onClick={ connectWithCoinbaseWallet }
+              className="bg-blue-500 p-2 rounded-lg mt-6 text-white font-semibold shadow-lg active:bg-white active:text-blue-500"
+            >
+              {" "}
+              Coinbase Wallet
             </button>
           </div>
         )}
-        
+
         <div className="flex overflow-x-scroll space-x-2 p-4 py-5 scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100">
           {ownedNfts?.data?.map((nft) => (
             <div
               key={nft.metadata.id}
               onClick={() => setSelectNft(nft)}
-              className={`flex flex-col space-y-2 card min-w-fit border-2 bg-gray-100 ${
+              className={`flex flex-col space-y-2 card min-w-fit dark:bg-[#3B3B3B]  border-2 bg-gray-100 ${
                 nft.metadata.id === selectNft?.metadata.id
                   ? "border-black scale-105 shadow-md"
                   : "border-transparent"
@@ -117,7 +133,7 @@ const Create = () => {
                   Price:
                 </label>
                 <input
-                  className="bg-gray-100 p-5 rounded-lg"
+                  className="bg-gray-100 p-5 rounded-lg dark:bg-[#3B3B3B] "
                   name="price"
                   type="text"
                   placeholder="0.05"

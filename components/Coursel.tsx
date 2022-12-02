@@ -29,7 +29,7 @@ const Coursel = () => {
             loading="lazy"
           />
         </div>
-        <div className="flex justify-around items-center bg-gray-100  text-left">
+        <div className="flex justify-around items-center bg-gray-100 text-left dark:text-black">
           <div className="flex items-center flex-col justify-center bg-gray-100">
             <h1>Soccer eupnoria is here</h1>
             <p>Show your passion and take amazing collectibles with you</p>

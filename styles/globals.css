@@ -10,12 +10,22 @@
     @apply hidden md:inline-flex cursor-pointer;
   }
   .link {
-    @apply hover:text-blue-500 hover:underline cursor-pointer text-gray-600;
+    @apply hover:text-blue-500 hover:underline cursor-pointer text-gray-600 dark:text-gray-200;
   }
   .card {
     @apply border border-gray-200 mt-3 rounded-md p-5 bg-gray-50 cursor-pointer hover:bg-gray-100 h-[450px] overflow-y-scroll scrollbar-hide;
   }
   .formFill {
     @apply border-2 border-gray-200 bg-white h-10 px-5 pr-16 rounded-lg text-sm outline-none;
+  }
+
+  .titleFooter {
+    @apply font-bold text-gray-600 dark:text-gray-400;
+  }
+
+  /* next-themes */
+  .dark {
+    color: #fff;
+    background: #0f1217;
   }
 }

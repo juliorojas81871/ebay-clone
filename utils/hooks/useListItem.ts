@@ -7,6 +7,8 @@ import {
   useCreateAuctionListing,
   useCreateDirectListing,
   useMetamask,
+  useWalletConnect,
+  useCoinbaseWallet,
   useActiveListings,
 } from "@thirdweb-dev/react";
 import { NATIVE_TOKEN_ADDRESS, NFT } from "@thirdweb-dev/sdk";
@@ -18,6 +20,8 @@ import network from "../network";
 
 const useListItem = () => {
   const connectWithMetamask = useMetamask();
+  const connectWithWalletConnect = useWalletConnect();
+  const connectWithCoinbaseWallet = useCoinbaseWallet();
   const address = useAddress();
   const rout = useRouter();
   const [selectNft, setSelectNft] = useState<NFT>();
@@ -138,6 +142,8 @@ const useListItem = () => {
     isLoadingAuction,
     isLoadingCreate,
     setPrice,
+    connectWithWalletConnect,
+    connectWithCoinbaseWallet,
   };
 };
 

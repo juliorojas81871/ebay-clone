@@ -9,9 +9,13 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Link from "next/link";
 import Image from "next/image";
 import { ConnectWallet } from "@thirdweb-dev/react";
+import { DropDown } from "./";
+import useColorTheme from "../utils/useColorTheme";
+import { ColorMode } from "@thirdweb-dev/react/dist/declarations/src/evm/components/theme";
 
 const Header = () => {
   const address = useAddress();
+  const theme = useColorTheme();
   return (
     <div className="max-w-6xl mx-auto p-2">
       <div className="sm:hidden p-2 flex justify-center">
@@ -27,9 +31,10 @@ const Header = () => {
       </div>
       <nav className="flex justify-between items-center ">
         <div className="flex items-center md:space-x-4 space-x-2 ">
-          <ConnectWallet 
-            className="relative flex items-center text-sm border-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition bg-blue-600 duration-200 text-white hover:bg-white hover:text-black"
-            colorMode="light"
+          <ConnectWallet
+            className="relative flex items-center text-sm border-blue-600 outline-none space-x-4 rounded-lg px-7 py-4 leading-none transition bg-blue-600 duration-200 text-white hover:bg-white hover:text-black hover:dark:bg-black hover:dark:text-white"
+            colorMode={theme as ColorMode | undefined}
+            accentColor="#1E88E5"
           />
           <p className="headerLinks hidden lg:inline">eBay Offers</p>
           <p className="headerLinks">Help & Contact</p>
@@ -39,17 +44,7 @@ const Header = () => {
           <p className="headerLinks hidden lg:inline">Ship to</p>
           <p className="headerLinks"> Sell</p>
           <p className="headerLinks">Watchlist</p>
-          <Link className="flex items-center hover:link" href="/addItem">
-            {" "}
-            Add to inventory <ExpandMoreIcon />
-          </Link>
-          <p className="headerLinks hidden lg:inline">
-            {" "}
-            My eBay{" "}
-            <span>
-              <ExpandMoreIcon />
-            </span>
-          </p>
+          <DropDown />
           <NotificationsNoneIcon />
           <ShoppingCartOutlinedIcon />
           <p className=""></p>
@@ -70,12 +65,14 @@ const Header = () => {
           </Link>
         </div>
         <button className="hidden lg:flex items-center space-x-2 w-20">
-          <p className="text-gray-600 text-sm">Shop by Category</p>
+          <p className="text-gray-600 text-sm dark:text-gray-200">
+            Shop by Category
+          </p>
           <ExpandMoreIcon />
         </button>
 
-        <div className="flex items-center space-x-2 px-2 md:px-5 py-2 border-black border-2 flex-1">
-          <SearchOutlinedIcon className="text-gray-300 " />
+        <div className="flex items-center space-x-2 px-2 md:px-5 py-2 border-black dark:border-white border-2 flex-1 dark:bg-[#3B3B3B] ">
+          <SearchOutlinedIcon className="text-gray-300" />
           <input
             className="flex-1 outline-none"
             type="text"
@@ -127,6 +124,6 @@ const Header = () => {
       </section>
     </div>
   );
-}
+};
 
 export default Header;

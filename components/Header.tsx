@@ -74,7 +74,7 @@ const Header = () => {
         <div className="flex items-center space-x-2 px-2 md:px-5 py-2 border-black dark:border-white border-2 flex-1 dark:bg-[#3B3B3B] ">
           <SearchOutlinedIcon className="text-gray-300" />
           <input
-            className="flex-1 outline-none"
+            className="flex-1 outline-none dark:bg-[#3B3B3B]"
             type="text"
             placeholder="Search for anything"
           />

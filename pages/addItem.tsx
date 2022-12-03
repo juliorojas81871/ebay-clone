@@ -38,7 +38,7 @@ const addItem = () => {
               Name of item
             </label>
             <input
-              className="formFill"
+              className="formFill dark:text-black"
               placeholder="Name of item..."
               type="text"
               name="name"
@@ -46,7 +46,7 @@ const addItem = () => {
             />
             <label htmlFor="">Description</label>
             <input
-              className="formFill"
+              className="formFill dark:text-black"
               placeholder="Enter the description.."
               type="text"
               name="description"

@@ -42,7 +42,6 @@ const Coursel = () => {
               width={200}
               height={200}
               objectFit="contain"
-              className="w-[100px] object-contain"
               src="/carousel3-1.webp"
               alt="first"
               loading="lazy"
